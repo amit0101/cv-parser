@@ -264,7 +264,7 @@ def split_section_entries(text):
 # Streamlit app
 st.title("Resume Parser")
 
-st.info("This implementation of the lightweight gpt-2-medium model is meant for running locally or on a server. It can be very slow if run on this app.")
+st.info("This implementation of the lightweight gpt-2-medium model is meant for running locally or on a server. It can be very slow if run on this app. [Disabled currently]")
 
 uploaded_file = st.file_uploader("Upload your resume (PDF or DOCX)", type=["pdf", "docx"])
 
@@ -273,6 +273,7 @@ with open('main/few_shot_examples.json', 'r') as file:
     few_shot_examples = json.load(file)
 
 if uploaded_file is not None:
+    st.rerun()
     try:
         if uploaded_file.type == "application/pdf":
             images = read_pdf(uploaded_file)
