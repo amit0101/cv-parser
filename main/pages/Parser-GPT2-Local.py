@@ -9,6 +9,7 @@ import streamlit as st
 from pdf2image import convert_from_path
 from pytesseract import Output
 from docx2pdf import convert
+import fitz
 
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
@@ -39,11 +40,22 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 
 # Function to read PDF files using tempfile
 def read_pdf(file):
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
-        tmp_file.write(file.read())
-        tmp_file.flush()
-        images = convert_from_path(tmp_file.name)
-    return images
+    if file is not None:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
+            tmp_file.write(file.read())
+            tmp_file.flush()
+            pdf_path = tmp_file.name
+
+        pdf_document = fitz.open(pdf_path)
+        images = []
+
+        for page_num in range(len(pdf_document)):
+            page = pdf_document.load_page(page_num)
+            pix = page.get_pixmap()
+            img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+            images.append(img)
+
+        return images
 
 
 # Function to perform OCR and get text with bounding boxes
