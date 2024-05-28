@@ -21,4 +21,4 @@ Install dependencies and activate poetry environment.
 
 ### Documentation and quick demo
 
-You can access the cv-parser documentation and an interface to test it on [this Streamlit app](resume-par-amit-kr.streamlit.app) without having to install the dependencies or create a virtual environment.
+You can access the cv-parser documentation and an interface to test it on [this Streamlit app](https://resume-par-amit-kr.streamlit.app) without having to install the dependencies or create a virtual environment.
