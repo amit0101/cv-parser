@@ -1,0 +1,101 @@
+[
+  {
+    "role": "user",
+    "content": "Name: John Doe\nDate of Birth: January 1, 1990\nAddress: 123 Main St, Springfield, USA\nPhone: +1-234-567-890\nEmail: john.doe@example.com"
+  },
+  {
+    "role": "assistant",
+    "content": {
+      "personal": {
+        "full_name": "John Doe",
+        "date_of_birth": "January 1, 1990",
+        "nationality": "",
+        "address": "123 Main St, Springfield, USA",
+        "phone": "+1-234-567-890",
+        "email": "john.doe@gmail.com"
+      }
+    }
+  },
+  {
+    "role": "user",
+    "content": "Phone: +1-234-567-890\nEmail: john.doe@example.com\nAddress: 123 Main St, Springfield, USA"
+  },
+  {
+    "role": "assistant",
+    "content": {
+      "contact": {
+        "phone": "+1-234-567-890",
+        "email": "john.doe@example.com",
+        "address": "123 Main St, Springfield, USA"
+      }
+    }
+  },
+  {
+    "role": "user",
+    "content": "Experienced software engineer with over 10 years of experience in web development, specializing in JavaScript and Python."
+  },
+  {
+    "role": "assistant",
+    "content": {
+      "summary": {
+        "summary": "Experienced software engineer with over 10 years of experience in web development, specializing in JavaScript and Python."
+      }
+    }
+  },
+  {
+    "role": "user",
+    "content": "MSc and BSc in Mathematics and Computing, Illinois Institute of Technology, IL, US, 2006-2011"
+  },
+  {
+    "role": "assistant",
+    "content": {
+      "education": {
+        "degree": "MSc and BSc",
+        "institution": "Illinois Institute of Technology",
+        "start_year": "2006",
+        "end_year": "2011"
+      }
+    }
+  },
+  {
+    "role": "user",
+    "content": "Software Engineer, XYZ Corp, Tokyo, Japan from June 2015 to August 2020. Developed and maintained web applications using JavaScript and Python."
+  },
+  {
+    "role": "assistant",
+    "content": {
+      "experience": {
+        "organization": "XYZ Corp",
+        "job_title": "Software Engineer",
+        "location": "Tokyo, Japan",
+        "start_date": "June 2015",
+        "end_date": "August 2020",
+        "description": "Developed and maintained web applications using JavaScript and Python."
+      }
+    }
+  },
+  {
+    "role": "user",
+    "content": "Proficient in Mandarin and German."
+  },
+  {
+    "role": "assistant",
+    "content": {
+      "languages": {
+        "languages": ["Mandarin", "German"]
+      }
+    }
+  },
+  {
+    "role": "user",
+    "content": "Skilled in machine learning with hands-on experience in TensorFlow and PyTorch."
+  },
+  {
+    "role": "assistant",
+    "content": {
+      "skills": {
+        "skills": ["machine learning", "TensorFlow", "PyTorch"]
+      }
+    }
+  }
+]

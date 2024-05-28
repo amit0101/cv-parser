@@ -1,0 +1,81 @@
+{
+  "personal": [
+    {
+      "input": "Name: John Doe\nDate of Birth: January 1, 1990\nAddress: 123 Main St, Springfield, USA\nPhone: +1-234-567-890\nEmail: john.doe@example.com",
+      "output": {
+        "section": "personal",
+        "full_name": "John Doe",
+        "date_of_birth": "January 1, 1990",
+        "nationality": "",
+        "address": "123 Main St, Springfield, USA",
+        "phone": "+1-234-567-890",
+        "email": "john.doe@gmail.com"
+      }
+    }
+  ],
+  "contact": [
+    {
+      "input": "Phone: +1-234-567-890\nEmail: john.doe@example.com\nAddress: 123 Main St, Springfield, USA",
+      "output": {
+        "section": "contact",
+        "phone": "+1-234-567-890",
+        "email": "john.doe@example.com",
+        "address": "123 Main St, Springfield, USA"
+      }
+    }
+  ],
+  "summary": [
+    {
+      "input": "Experienced software engineer with over 10 years of experience in web development, specializing in JavaScript and Python.",
+      "output": {
+        "section": "summary",
+        "summary": "Experienced software engineer with over 10 years of experience in web development, specializing in JavaScript and Python."
+      }
+    }
+  ],
+  "education": [
+    {
+      "input": "MSc and BSc in Mathematics and Computing, Illinois Institute of Technology, IL, US, 2006-2011",
+      "output": {
+        "section": "education",
+        "degree": "MSc and BSc",
+        "institution": "Illinois Institute of Technology",
+        "start_year": "2006",
+        "end_year": "2011"
+      }
+    }
+  ],
+  "experience": [
+    {
+      "input": "Software Engineer, XYZ Corp, Tokyo, Japan from June 2015 to August 2020. Developed and maintained web applications using JavaScript and Python.",
+      "output": {
+        "section": "experience",
+        "organization": "XYZ Corp",
+        "job_title": "Software Engineer",
+        "location": "Tokyo, Japan",
+        "start_date": "June 2015",
+        "end_date": "August 2020",
+        "description": "Developed and maintained web applications using JavaScript and Python."
+      }
+    }
+  ],
+  "languages": [
+    {
+      "input": "Proficient in Mandarin and German.",
+      "output": {
+        "section": "languages",
+        "languages": ["Mandarin", "German"]
+      }
+    }
+  ],
+  "skills": [
+    {
+      "input": "Skilled in machine learning with hands-on experience in TensorFlow and PyTorch.",
+      "output": {
+        "section": "skills",
+        "skills": ["machine learning", "TensorFlow", "PyTorch"]
+      }
+    }
+  ]
+}
+
