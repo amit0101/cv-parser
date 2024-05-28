@@ -18,7 +18,7 @@ st.set_page_config(
     # layout="wide"
 )
 
-# client = OpenAI(api_key=st.secrets.OPENAI_API_KEY)
+client = OpenAI(api_key=st.secrets.OPENAI_API_KEY)
 
 
 sections_list = ["personal", "contact", "summary", "education", "experience", "skills"]
