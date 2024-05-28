@@ -2270,6 +2270,21 @@ lxml = ">=3.1.0"
 typing-extensions = ">=4.9.0"
 
 [[package]]
+name = "python-poppler"
+version = "0.4.1"
+description = "A Python binding to poppler-cpp"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "python_poppler-0.4.1.tar.gz", hash = "sha256:e6ca5c23ec02350bf2cef85a6bf9f1b261796436db478176f9d24fb14eeecc6a"},
+]
+
+[package.extras]
+dev = ["black", "flake8", "flake8-bugbear"]
+doc = ["gph-import", "sphinx", "sphinx-issues", "sphinx-material"]
+test = ["pytest"]
+
+[[package]]
 name = "pytz"
 version = "2024.1"
 description = "World timezone definitions, modern and historical"
@@ -3922,4 +3937,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.12"
-content-hash = "72d3c2afe1f0345852ad13900ce65ebf44f584310e479e253c645471af9454e5"
+content-hash = "86433da0f779385d4ab491254280a1241f55d90950033ed3de315b0973fc3de7"
