@@ -19,6 +19,6 @@ Install dependencies and activate poetry environment.
 ./poetry_run.sh
 ```
 
-### Quick demo
+### Documentation and quick demo
 
-Alternatively, you can access the cv-parser model on [this Streamlit app](cv-parser-amit-kr.streamlit.app) without having to install the dependencies or create a virtual environment.
+You can access the cv-parser documentation and an interface to test it on [this Streamlit app](resume-par-amit-kr.streamlit.app) without having to install the dependencies or create a virtual environment.
