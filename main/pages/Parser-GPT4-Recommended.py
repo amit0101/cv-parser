@@ -3,12 +3,13 @@ import tempfile
 import json
 import re
 import pytesseract
-
+from PIL import Image
 from openai import OpenAI
 import streamlit as st
-from pdf2image import convert_from_path
+# from pdf2image import convert_from_bytes
 from pytesseract import Output
 from docx2pdf import convert
+import fitz
 
 
 st.set_page_config(
@@ -26,10 +27,16 @@ sections_list = ["personal", "contact", "summary", "education", "experience", "s
 
 # Function to read PDF files using tempfile
 def read_pdf(file):
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
-        tmp_file.write(file.read())
-        tmp_file.flush()
-        images = convert_from_path(tmp_file.name)
+    if file is not None:
+        pdf_document = fitz.open(file.name)
+
+    images = []
+    for page_num in range(len(pdf_document)):
+        page = pdf_document.load_page(page_num)
+        pix = page.get_pixmap()
+        img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+        images.append(img)
+
     return images
 
 
