@@ -1875,23 +1875,6 @@ typing = ["typing-extensions"]
 xmp = ["defusedxml"]
 
 [[package]]
-name = "poppler-utils"
-version = "0.1.0"
-description = "Precompiled command-line utilities (based on Poppler) for manipulating PDF files and converting them to other formats."
-optional = false
-python-versions = "*"
-files = [
-    {file = "poppler-utils-0.1.0.tar.gz", hash = "sha256:e97a92dcfde57b21a90c3070694e58f8eea155515ae8e624266a052d0776a349"},
-    {file = "poppler_utils-0.1.0-py3-none-any.whl", hash = "sha256:a6336b4c7d59e49d339b92c60d1f63905f577ab106038bde940a6861deefd3f3"},
-]
-
-[package.dependencies]
-Click = ">=7.0"
-
-[package.extras]
-dev = ["Click (>=7.0)", "Sphinx (>=2.2.1)"]
-
-[[package]]
 name = "protobuf"
 version = "4.25.3"
 description = ""
@@ -2285,21 +2268,6 @@ files = [
 [package.dependencies]
 lxml = ">=3.1.0"
 typing-extensions = ">=4.9.0"
-
-[[package]]
-name = "python-poppler"
-version = "0.4.1"
-description = "A Python binding to poppler-cpp"
-optional = false
-python-versions = ">=3.6"
-files = [
-    {file = "python_poppler-0.4.1.tar.gz", hash = "sha256:e6ca5c23ec02350bf2cef85a6bf9f1b261796436db478176f9d24fb14eeecc6a"},
-]
-
-[package.extras]
-dev = ["black", "flake8", "flake8-bugbear"]
-doc = ["gph-import", "sphinx", "sphinx-issues", "sphinx-material"]
-test = ["pytest"]
 
 [[package]]
 name = "pytz"
@@ -3954,4 +3922,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.12"
-content-hash = "451a70f9be1f935b666817c836b4ccad8866a75d5d4a0d9c14bf49b07ec7ad6d"
+content-hash = "72d3c2afe1f0345852ad13900ce65ebf44f584310e479e253c645471af9454e5"
