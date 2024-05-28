@@ -252,6 +252,8 @@ def split_section_entries(text):
 # Streamlit app
 st.title("Resume Parser")
 
+st.info("This implementation of the lightweight gpt-2-medium model is meant for running locally or on a server. It can be very slow if run on this app.")
+
 uploaded_file = st.file_uploader("Upload your resume (PDF or DOCX)", type=["pdf", "docx"])
 
 # Load the few-shot examples
