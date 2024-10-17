@@ -6,7 +6,7 @@ import pytesseract
 from PIL import Image
 from openai import OpenAI
 import streamlit as st
-# from pdf2image import convert_from_bytes
+from pdf2image import convert_from_path
 from pytesseract import Output
 from docx2pdf import convert
 import fitz
@@ -43,6 +43,20 @@ def read_pdf(file):
             images.append(img)
 
         return images
+
+
+# Function to read DOCX files
+def read_docx(file):
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".docx") as tmp_file:
+        tmp_file.write(file.read())
+        tmp_file.flush()
+        # Convert DOCX to PDF using docx2pdf
+        pdf_path = tmp_file.name.replace('.docx', '.pdf')
+        convert(tmp_file.name, pdf_path)
+        # Convert PDF to images using pdf2image
+        images = convert_from_path(pdf_path)
+    return images
+
 
 # Function to perform OCR and get text with bounding boxes
 def ocr_images(images):
@@ -253,15 +267,3 @@ if uploaded_file is not None:
     except Exception as e:
         st.info(f"An error occurred: {e}")
 
-
-# Function to read DOCX files
-def read_docx(file):
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".docx") as tmp_file:
-        tmp_file.write(file.read())
-        tmp_file.flush()
-        # Convert DOCX to PDF using docx2pdf
-        pdf_path = tmp_file.name.replace('.docx', '.pdf')
-        convert(tmp_file.name, pdf_path)
-        # Convert PDF to images using pdf2image
-        images = convert_from_path(pdf_path)
-    return images
