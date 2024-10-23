@@ -74,7 +74,8 @@ def extract_text_with_bboxes(ocr_results):
                     normalized_text = re.sub(r'\W+', '', text.lower())
                     if normalized_text in sections_list:
                         current_section = normalized_text
-                        sections[current_section] = ""
+                        if current_section not in sections:
+                            sections[current_section] = ""
                         st.write(f"New section detected: {current_section} at position ({x}, {y})")
                 if current_section:
                     sections[current_section] += " " + text
@@ -141,7 +142,7 @@ def clean_text(text):
 def extract_json_from_response(response):
     try:
         response = response.strip()  # Ensure no extra whitespace
-        if response.startswith("{") and response.endswith("}") or response.startswith("[") and response.endswith("]"):
+        if response.startswith("{") and response.endswith("}"):
             return json.loads(response)
         else:
             start_idx = response.index("{")
@@ -150,14 +151,14 @@ def extract_json_from_response(response):
             return json.loads(json_response)
     except (ValueError, json.JSONDecodeError) as e:
         st.write(f"Error extracting JSON: {e}")
-        st.write(f"Response received: {response}")
+        # st.write(f"Response received: {response}")
         return {}
 
 # Function to split section text into individual entries
 def split_section_entries(text):
     # Implement a method to split the section text into individual entries
     # This can be based on newlines, bullet points, or any other delimiter
-    return [entry.strip() for entry in re.split(r'(\*|\n\n|\n|\.|;)', text) if entry.strip()]  # Example split based on punctuation or newlines
+    return re.split(r'(\*|\n\n|\n)', text)  # Example split based on double newlines or asterisks
 
 # Streamlit app
 st.title("Resume Parser")
@@ -190,8 +191,6 @@ if uploaded_file is not None:
                 clean_section_text = clean_text(text)
                 entries = split_section_entries(clean_section_text)
                 for entry in entries:
-                    if not entry:  # Skip empty entries
-                        continue
                     st.info(f"Processing entry: {entry}")
                     identified_section = identify_section(entry)
                     # st.info(f"Identified section: {identified_section}")
@@ -201,6 +200,10 @@ if uploaded_file is not None:
                         parsed_data[identified_section] = []
                     if isinstance(parsed_entry, dict):
                         parsed_data[identified_section].append(parsed_entry)  # Append only valid dictionary entries
+                    else:
+                        # If the identified section matches an existing section, append the entry to that section
+                        if identified_section in parsed_data:
+                            parsed_data[identified_section].append(parsed_entry)
             st.success("Resume parsed successfully!")
             st.json(parsed_data)
     except Exception as e:
