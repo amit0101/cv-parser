@@ -106,11 +106,12 @@ def get_few_shot_examples(examples, section):
     formatted_examples = ""
     for example in section_examples:
         formatted_examples += f"Input: {example['input']}\nOutput: {json.dumps(example['output'], indent=2)}\n\n"
-    return formatted_examples
+    return section_examples
 
 # Function to parse text with GPT-4 Turbo for a specific section
 def parse_text_with_llm_for_section(text, section, examples):
     few_shot_examples = get_few_shot_examples(examples, section)
+    st.info(few_shot_examples)
     prompt = f"Extract the {section} information from the following text and provide it only in JSON format. Ensure the JSON structure matches the examples provided.\n\nExamples: {few_shot_examples}\n\nText: {text}"
 
     response = openai.chat.completions.create(
