@@ -195,7 +195,7 @@ if uploaded_file is not None:
                     identified_section = identify_section(entry)
                     st.info(f"Identified section: {identified_section}")
                     parsed_entry = parse_text_with_llm_for_section(entry, identified_section, few_shot_examples)
-                    st.info("Parsed entry", parsed_entry)
+                    st.info(f"Parsed entry: {parsed_entry}")
                     if identified_section not in parsed_data:
                         parsed_data[identified_section] = []
                     parsed_data[identified_section].extend(parsed_entry)  # Use extend instead of append
