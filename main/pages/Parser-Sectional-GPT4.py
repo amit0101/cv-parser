@@ -86,7 +86,7 @@ def identify_section(text):
               "Example:\nInput: MSc and BSc in Mathematics\nSection: education\n\n" +
               f"Input: {text}\nSection:")
 
-    response = openai.ChatCompletion.create(
+    response = openai.chat.completions.create(
         model="gpt-4-turbo",
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
@@ -111,7 +111,7 @@ def parse_text_with_llm_for_section(text, section, examples):
     few_shot_examples = get_few_shot_examples(examples, section)
     prompt = f"Extract the {section} information from the following text and provide it only in JSON format. Ensure the JSON structure matches the examples provided.\n\n{few_shot_examples}\nInput: {text}\nOutput:"
 
-    response = openai.ChatCompletion.create(
+    response = openai.chat.completions.create(
         model="gpt-4-turbo",
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
