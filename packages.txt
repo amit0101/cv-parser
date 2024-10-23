@@ -5,3 +5,4 @@ libjpeg-dev
 zlib1g-dev
 libtiff-dev
 libfreetype6-dev
+libreoffice
