@@ -9,11 +9,11 @@ import ocrmypdf
 import cv2
 import numpy as np
 
-st.set_page_config(
-    page_title="CV Parser",
-    page_icon="🤖",
-    initial_sidebar_state="expanded",
-)
+# st.set_page_config(
+#     page_title="CV Parser",
+#     page_icon="🤖",
+#     initial_sidebar_state="expanded",
+# )
 
 # Sections to be identified in the resume
 sections_list = ["personal", "contact", "summary", "education", "experience", "skills"]
