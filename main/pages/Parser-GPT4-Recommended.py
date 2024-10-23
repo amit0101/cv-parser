@@ -6,7 +6,6 @@ from PIL import Image
 import streamlit as st
 from pdf2image import convert_from_path
 import pypandoc
-import fitz
 import easyocr
 import cv2
 import numpy as np
