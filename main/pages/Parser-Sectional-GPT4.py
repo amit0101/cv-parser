@@ -96,7 +96,7 @@ def identify_section(text):
     )
 
     st.write(f"Response: {response}")
-    section = response.choices[0].message.content.strip()
+    section = response['choices'][0]['message']['content'].strip()
     st.write(f"Identified section for text: {text}\nSection: {section}")
     return section
 
@@ -122,7 +122,7 @@ def parse_text_with_llm_for_section(text, section, examples):
     )
 
     st.write(f"Response: {response}")
-    response_text = response.choices[0].message.content.strip()
+    response_text = response['choices'][0]['message']['content'].strip()
     st.info(f"Model Response for section {section}: {response_text}")
 
     # Extract JSON from the response
