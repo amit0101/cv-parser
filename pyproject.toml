@@ -14,6 +14,7 @@ opencv-python-headless = "^4.9.0.80"
 numpy = "^1.26.4"
 openai = "^1.52.1"
 pytesseract = "^0.3.13"
+poppler-utils = "^0.1.0"
 
 [build-system]
 requires = ["poetry-core"]

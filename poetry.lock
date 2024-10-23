@@ -933,6 +933,23 @@ typing = ["typing-extensions"]
 xmp = ["defusedxml"]
 
 [[package]]
+name = "poppler-utils"
+version = "0.1.0"
+description = "Precompiled command-line utilities (based on Poppler) for manipulating PDF files and converting them to other formats."
+optional = false
+python-versions = "*"
+files = [
+    {file = "poppler-utils-0.1.0.tar.gz", hash = "sha256:e97a92dcfde57b21a90c3070694e58f8eea155515ae8e624266a052d0776a349"},
+    {file = "poppler_utils-0.1.0-py3-none-any.whl", hash = "sha256:a6336b4c7d59e49d339b92c60d1f63905f577ab106038bde940a6861deefd3f3"},
+]
+
+[package.dependencies]
+Click = ">=7.0"
+
+[package.extras]
+dev = ["Click (>=7.0)", "Sphinx (>=2.2.1)"]
+
+[[package]]
 name = "protobuf"
 version = "5.28.3"
 description = ""
@@ -1582,4 +1599,4 @@ watchmedo = ["PyYAML (>=3.10)"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.12"
-content-hash = "85b5c37feb155f0283f3c025ac20917641d6773a2fee5824372189bc44e41350"
+content-hash = "859b9e75e5e14667f434e8cb9ec35fb2e58e2a322a2d3d99627c85939a3922f0"
