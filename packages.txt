@@ -1,8 +1,9 @@
+pandoc
 poppler-utils
-libomp
+libomp5
 libmagic1
 libglib2.0-0
 libsm6
 libxrender1
 libxext6
-pandoc
+poppler-utils
