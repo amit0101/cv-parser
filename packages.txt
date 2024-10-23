@@ -1,17 +1,2 @@
 tesseract-ocr
 tesseract-ocr-por
-
-# Required for pdf2image
-poppler-utils
-
-# Required for Pillow (PIL)
-libjpeg-dev
-zlib1g-dev
-libtiff-dev
-libpng-dev
-
-# Required for OpenCV (cv2)
-libsm6
-libxrender1
-libxext6
-libglib2.0-0
