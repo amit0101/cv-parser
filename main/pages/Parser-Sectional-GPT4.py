@@ -141,7 +141,7 @@ def clean_text(text):
 def extract_json_from_response(response):
     try:
         response = response.strip()  # Ensure no extra whitespace
-        if response.startswith("{") and response.endswith("}"):
+        if response.startswith("{") and response.endswith("}") or response.startswith("[") and response.endswith("]"):
             return json.loads(response)
         else:
             start_idx = response.index("{")
@@ -157,7 +157,7 @@ def extract_json_from_response(response):
 def split_section_entries(text):
     # Implement a method to split the section text into individual entries
     # This can be based on newlines, bullet points, or any other delimiter
-    return re.split(r'(\*|\n\n|\n)', text)  # Example split based on double newlines or asterisks
+    return [entry.strip() for entry in re.split(r'(\*|\n\n|\n|\.|;)', text) if entry.strip()]  # Example split based on punctuation or newlines
 
 # Streamlit app
 st.title("Resume Parser")
@@ -190,6 +190,8 @@ if uploaded_file is not None:
                 clean_section_text = clean_text(text)
                 entries = split_section_entries(clean_section_text)
                 for entry in entries:
+                    if not entry:  # Skip empty entries
+                        continue
                     st.info(f"Processing entry: {entry}")
                     identified_section = identify_section(entry)
                     # st.info(f"Identified section: {identified_section}")
