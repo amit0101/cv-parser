@@ -8,29 +8,16 @@ import streamlit as st
 from pdf2image import convert_from_path
 from pytesseract import Output
 from PIL import Image
-
-from transformers import AutoTokenizer, AutoModelForCausalLM  # Replacing GPT-2 with GPT-4 Turbo
+import openai
 
 # Set the TOKENIZERS_PARALLELISM environment variable to false
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
+# os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-# Set the device to CPU explicitly
-device = torch.device("cpu")
-
-# Initialize the model
-model_name = "gpt-4-turbo"  # Using GPT-2 Medium
-
-model = AutoModelForCausalLM.from_pretrained(model_name).to(device)
-tokenizer = AutoTokenizer.from_pretrained(model_name)
+# Set OpenAI API key
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Define the sections
 sections_list = ["personal", "contact", "summary", "education", "experience", "skills"]
-
-st.set_page_config(
-    page_title="CV Parser",
-    page_icon="🤖",
-    initial_sidebar_state="expanded",
-)
 
 # Function to read PDF files using tempfile
 def read_pdf(file):
@@ -85,53 +72,25 @@ def extract_text_with_bboxes(ocr_results):
                     sections[current_section] += " " + text
     return sections
 
-# Function to extract sections from OCR results
-def extract_sections(ocr_results):
-    sections = {}
-    current_section = None
-    for page_idx, page in enumerate(ocr_results):
-        st.write(f"Processing page {page_idx}")
-        for i in range(len(page['text'])):
-            try:
-                text = page['text'][i]
-                if text.strip().lower() in ["personal", "contact", "summary", "education", "experience", "languages",
-                                            "skills", "achievements", "certifications", "qualifications"]:
-                    current_section = text.strip().lower()
-                    sections[current_section] = ""
-                    st.write(f"New section detected: {current_section}")
-                elif current_section:
-                    sections[current_section] += " " + text.strip()
-            except IndexError as e:
-                st.write(f"IndexError at Page {page_idx}, Index {i}: {e}")
-                continue
-            except Exception as e:
-                st.write(f"Unexpected error at Page {page_idx}, Index {i}: {e}")
-                continue
-    return sections
-
-# Function to identify the section type
-def identify_section(text, model, tokenizer):
+# Function to identify the section type using GPT-4 Turbo
+def identify_section(text):
     prompt = (f"Identify the section type for the input text following the example. The identified section should strictly be from the list: {', '.join(sections_list)}.\n\n" +
               "Example:\nInput: MSc and BSc in Mathematics\nSection: education\n\n" +
               f"Input: {text}\nSection:")
 
-    inputs = tokenizer(prompt, return_tensors="pt", truncation=True).to(device)
-    outputs = model.generate(
-        inputs.input_ids,
-        attention_mask=inputs["attention_mask"],
-        max_new_tokens=50,  # Use max_new_tokens instead of max_length
-        num_return_sequences=1,
-        pad_token_id=tokenizer.eos_token_id
+    response = openai.ChatCompletion.create(
+        model="gpt-4-turbo",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+        ],
+        max_tokens=50
     )
-    response = tokenizer.decode(outputs[0], skip_special_tokens=True).strip()
 
-    st.write("Detection response", response)
-    # Extract section type from the response
-    section = response.split(":")[-1].strip()
+    section = response['choices'][0]['message']['content'].strip()
     st.write(f"Identified section for text: {text}\nSection: {section}")
     return section
 
-# Function to provide few-shot examples based on the section
 def get_few_shot_examples(examples, section):
     section_examples = [example for example in examples if example["output"]["section"] == section]
     formatted_examples = ""
@@ -139,44 +98,26 @@ def get_few_shot_examples(examples, section):
         formatted_examples += f"Input: {example['input']}\nOutput: {json.dumps(example['output'], indent=2)}\n\n"
     return formatted_examples
 
-# Function to parse text with GPT-2 Medium for a specific section
-def parse_text_with_llm_for_section(text, section, model, tokenizer, examples, max_length=256, max_new_tokens=50):
+# Function to parse text with GPT-4 Turbo for a specific section
+def parse_text_with_llm_for_section(text, section, examples):
     few_shot_examples = get_few_shot_examples(examples, section)
     prompt = f"Extract the {section} information from the following text and provide it only in JSON format. Ensure the JSON structure matches the examples provided.\n\n{few_shot_examples}\nInput: {text}\nOutput:"
 
-    inputs = tokenizer(prompt, return_tensors="pt", truncation=True).to(device)
-    input_ids = inputs.input_ids
+    response = openai.ChatCompletion.create(
+        model="gpt-4-turbo",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+        ],
+        max_tokens=150
+    )
 
-    # Chunk the input IDs if they exceed the max length
-    chunks = [input_ids[0][i:i + max_length] for i in range(0, len(input_ids[0]), max_length)]
+    response_text = response['choices'][0]['message']['content'].strip()
+    st.info(f"Model Response for section {section}: {response_text}")
 
-    all_outputs = []
-
-    for chunk in chunks:
-        chunk_input_ids = chunk.unsqueeze(0)
-        attention_mask = torch.ones_like(chunk_input_ids).to(device)
-
-        outputs = model.generate(
-            chunk_input_ids,
-            attention_mask=attention_mask,
-            max_new_tokens=max_new_tokens,  # Use max_new_tokens instead of max_length
-            num_return_sequences=1,
-            pad_token_id=tokenizer.eos_token_id
-        )
-        response = tokenizer.decode(outputs[0], skip_special_tokens=True).strip()
-
-        # Debugging: Print the model's response
-        st.info(f"Model Response for section {section}: {response}")
-
-        # Extract JSON from the response
-        json_output = extract_json_from_response(response)
-        if isinstance(json_output, dict):
-            all_outputs.append(json_output)
-        else:
-            st.info(f"Unexpected JSON output type: {type(json_output)}")
-
-    st.write(f"Parsed entries for section {section}: {all_outputs}")
-    return all_outputs
+    # Extract JSON from the response
+    json_output = extract_json_from_response(response_text)
+    return json_output
 
 # Function to clean the extracted text
 def clean_text(text):
@@ -217,8 +158,8 @@ if uploaded_file is not None:
             ocr_results = ocr_images(images)
             sections = extract_text_with_bboxes(ocr_results)
         elif uploaded_file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-            extracted_text = read_docx(uploaded_file)
-            sections = extract_sections(extracted_text)
+            ocr_results = read_docx(uploaded_file)
+            sections = extract_text_with_bboxes(ocr_results)
         else:
             st.error("Unsupported file type")
 
@@ -233,9 +174,9 @@ if uploaded_file is not None:
                 entries = split_section_entries(clean_section_text)
                 for entry in entries:
                     st.info(f"Processing entry: {entry}")
-                    identified_section = identify_section(entry, model, tokenizer)
+                    identified_section = identify_section(entry)
                     st.info(f"Identified section: {identified_section}")
-                    parsed_entry = parse_text_with_gpt2_for_section(entry, identified_section, model, tokenizer, few_shot_examples)
+                    parsed_entry = parse_text_with_llm_for_section(entry, identified_section, few_shot_examples)
                     st.info("Parsed entry", parsed_entry)
                     if identified_section not in parsed_data:
                         parsed_data[identified_section] = []
@@ -245,10 +186,3 @@ if uploaded_file is not None:
             st.json(parsed_data)
     except Exception as e:
         st.error(f"An error occurred: {e}")
-
-# Function to read DOCX files
-def read_docx(file):
-    from docx import Document
-    doc = Document(file)
-    text = "\n".join([paragraph.text for paragraph in doc.paragraphs])
-    return text
