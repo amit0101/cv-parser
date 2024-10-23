@@ -16,8 +16,8 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Initialize EasyOCR reader
-reader = easyocr.Reader(['en'])
+# Initialize EasyOCR reader with GPU disabled
+reader = easyocr.Reader(['en'], gpu=False)
 
 # Sections to be identified in the resume
 sections_list = ["personal", "contact", "summary", "education", "experience", "skills"]
@@ -163,4 +163,4 @@ if uploaded_file is not None:
             with st.expander("Section wise text", expanded=True):
                 st.json(sections)
     except Exception as e:
-        st.info(f"An error occurred: {e}")
+        st.error(f"An error occurred: {e}")
