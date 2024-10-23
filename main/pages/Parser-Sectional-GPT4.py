@@ -95,6 +95,7 @@ def identify_section(text):
         max_tokens=300
     )
 
+    st.write(f"Response: {response}")
     section = response.choices[0].message.content.strip()
     st.write(f"Identified section for text: {text}\nSection: {section}")
     return section
@@ -120,6 +121,7 @@ def parse_text_with_llm_for_section(text, section, examples):
         max_tokens=1500
     )
 
+    st.write(f"Response: {response}")
     response_text = response.choices[0].message.content.strip()
     st.info(f"Model Response for section {section}: {response_text}")
 
