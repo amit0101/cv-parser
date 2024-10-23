@@ -9,6 +9,7 @@ from pdf2image import convert_from_path
 from pytesseract import Output
 from PIL import Image
 import openai
+import subprocess
 
 # Set the TOKENIZERS_PARALLELISM environment variable to false
 # os.environ["TOKENIZERS_PARALLELISM"] = "false"
@@ -32,13 +33,20 @@ def resize_image(img, max_width=1024, max_height=1024):
     return img
 
 # Function to read DOCX files
+# Function to read DOCX files and convert to PDF, then to images
 def read_docx(file):
     with tempfile.NamedTemporaryFile(delete=False, suffix=".docx") as tmp_file:
         tmp_file.write(file.read())
         tmp_file.flush()
-        # Convert DOCX to images using pdf2image
-        images = convert_from_path(tmp_file.name, dpi=150)
-        images = [resize_image(img) for img in images]
+        pdf_path = tmp_file.name.replace(".docx", ".pdf")
+        try:
+            # Convert DOCX to PDF using libreoffice
+            subprocess.run(["libreoffice", "--headless", "--convert-to", "pdf", tmp_file.name, "--outdir", os.path.dirname(tmp_file.name)], check=True)
+            images = convert_from_path(pdf_path, dpi=150)
+            images = [resize_image(img) for img in images]
+        except Exception as e:
+            st.error("Failed to convert DOCX to PDF. Is LibreOffice installed?")
+            raise e
     return images
 
 # Function to perform OCR and get text with bounding boxes
