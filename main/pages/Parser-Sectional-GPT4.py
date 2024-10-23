@@ -163,7 +163,7 @@ def split_section_entries(text):
 # Streamlit app
 st.title("Resume Parser")
 
-uploaded_file = st.file_uploader("Upload your resume (PDF or DOCX)", type=["pdf", "docx"])
+uploaded_file = st.file_uploader("Upload your resume in PDF format", type=["pdf"])
 
 # Load the few-shot examples
 with open('main/few_shot_examples_gpt4.json', 'r') as file:
