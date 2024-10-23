@@ -1,4 +1,3 @@
 tesseract-ocr
 tesseract-ocr-por
-pdflatex
 pandoc
