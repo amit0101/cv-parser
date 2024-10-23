@@ -132,6 +132,7 @@ werkzeug = "^3.0.3"
 wrapt = "^1.16.0"
 docx2pdf = "^0.1.8"
 poppler-utils = "^0.1.0"
+easyocr = "^1.7.2"
 
 
 [build-system]
