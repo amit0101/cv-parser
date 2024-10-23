@@ -106,7 +106,7 @@ def get_few_shot_examples(examples, section):
     st.info(section_examples)
     formatted_examples = ""
     for example in section_examples:
-        formatted_examples += f"Input: {example['input']}\nOutput: {json.dumps(example['output'], indent=2)}\n\n"
+        formatted_examples += f"Input: {example['input']}\nOutput: {json.dumps(example['output'])}\n\n"
     return formatted_examples
 
 # Function to parse text with GPT-4 Turbo for a specific section
