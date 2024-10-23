@@ -117,7 +117,7 @@ def parse_text_with_llm_for_section(text, section, examples):
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": prompt}
         ],
-        max_tokens=150
+        max_tokens=1500
     )
 
     response_text = response['choices'][0]['message']['content'].strip()
