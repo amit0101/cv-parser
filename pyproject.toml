@@ -133,7 +133,7 @@ wrapt = "^1.16.0"
 docx2pdf = "^0.1.8"
 poppler-utils = "^0.1.0"
 easyocr = "^1.7.2"
-
+pypandoc = "^1.10"
 
 [build-system]
 requires = ["poetry-core"]
