@@ -5,7 +5,7 @@ import re
 from PIL import Image
 import streamlit as st
 from pdf2image import convert_from_path
-from docx2pdf import convert
+from pypandoc import convert
 import fitz
 import easyocr
 import cv2
@@ -47,9 +47,9 @@ def read_docx(file):
     with tempfile.NamedTemporaryFile(delete=False, suffix=".docx") as tmp_file:
         tmp_file.write(file.read())
         tmp_file.flush()
-        # Convert DOCX to PDF using docx2pdf
         pdf_path = tmp_file.name.replace('.docx', '.pdf')
-        convert(tmp_file.name, pdf_path)
+        # Convert DOCX to PDF using pypandoc
+        pypandoc.convert_file(tmp_file.name, 'pdf', outputfile=pdf_path)
         # Convert PDF to images using pdf2image
         images = convert_from_path(pdf_path, dpi=300)
     return images
