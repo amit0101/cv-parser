@@ -5,8 +5,7 @@ import re
 from PIL import Image
 import streamlit as st
 from pdf2image import convert_from_path
-import pypandoc
-import easyocr
+import ocrmypdf
 import cv2
 import numpy as np
 
@@ -16,27 +15,28 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Initialize EasyOCR reader with GPU disabled
-reader = easyocr.Reader(['en'], gpu=False)
-
 # Sections to be identified in the resume
 sections_list = ["personal", "contact", "summary", "education", "experience", "skills"]
 
 # Function to read PDF files using tempfile
-def read_pdf(file):
+def read_pdf(file, max_pages=3):
     if file is not None:
         with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
             tmp_file.write(file.read())
             tmp_file.flush()
             pdf_path = tmp_file.name
 
+        # Run OCR on the PDF to extract text
+        ocrmypdf.ocr(pdf_path, pdf_path, use_threads=True)
+
         pdf_document = fitz.open(pdf_path)
         images = []
 
-        for page_num in range(len(pdf_document)):
+        for page_num in range(min(len(pdf_document), max_pages)):
             page = pdf_document.load_page(page_num)
             pix = page.get_pixmap()
             img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+            img = resize_image(img)
             images.append(img)
 
         return images
@@ -46,12 +46,17 @@ def read_docx(file):
     with tempfile.NamedTemporaryFile(delete=False, suffix=".docx") as tmp_file:
         tmp_file.write(file.read())
         tmp_file.flush()
-        pdf_path = tmp_file.name.replace('.docx', '.pdf')
-        # Convert DOCX to PDF using pypandoc
-        pypandoc.convert_file(tmp_file.name, 'pdf', outputfile=pdf_path)
+        # Convert DOCX to images using pdf2image
+        images = convert_from_path(tmp_file.name, dpi=150)
         # Convert PDF to images using pdf2image
-        images = convert_from_path(pdf_path, dpi=300)
+        images = convert_from_path(pdf_path, dpi=150)
+        images = [resize_image(img) for img in images]
     return images
+
+# Function to resize images to reduce memory usage
+def resize_image(img, max_width=1024, max_height=1024):
+    img.thumbnail((max_width, max_height), Image.ANTIALIAS)
+    return img
 
 # Function to preprocess images
 def preprocess_image(img):
@@ -65,14 +70,6 @@ def preprocess_image(img):
     img = Image.fromarray(img_np)
     return img
 
-# Function to perform OCR using EasyOCR
-def ocr_images_easyocr(images):
-    ocr_results = []
-    for img in images:
-        img_np = np.array(img)
-        result = reader.readtext(img_np)
-        ocr_results.append(result)
-    return ocr_results
 
 # Function to clean the extracted text
 def clean_text(text_lines):
@@ -146,14 +143,14 @@ if uploaded_file is not None:
     try:
         if uploaded_file.type == "application/pdf":
             images = read_pdf(uploaded_file)
-            ocr_results_easyocr = ocr_images_easyocr(images)
-            extracted_text = [text[1] for result in ocr_results_easyocr for text in result]
+            ocr_results = []  # Placeholder for OCR results
+            extracted_text = [text for text in ocr_results]
             with st.expander("OCR extracted text", expanded=False):
                 st.info(f"{extracted_text}")
         elif uploaded_file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
             images = read_docx(uploaded_file)
-            ocr_results_easyocr = ocr_images_easyocr(images)
-            extracted_text = [text[1] for result in ocr_results_easyocr for text in result]
+            ocr_results = ocr_images_pytesseract(images)
+            extracted_text = [text for text in ocr_results]
         else:
             st.error("Unsupported file type")
 
