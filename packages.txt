@@ -1,2 +1,7 @@
 tesseract-ocr
 tesseract-ocr-por
+poppler-utils
+libjpeg-dev
+zlib1g-dev
+libtiff-dev
+libfreetype6-dev
