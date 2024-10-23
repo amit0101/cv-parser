@@ -102,7 +102,7 @@ def identify_section(text):
 
 # Function to get few-shot examples for a specific section
 def get_few_shot_examples(examples, section):
-    section_examples = [example for example in examples if example['output']['section'] == section]
+    section_examples = [example for example in examples if example.get('output', {}).get('section') == section]
     formatted_examples = []
     for example in section_examples:
         formatted_examples.append({"role": "user", "content": example['input']})
