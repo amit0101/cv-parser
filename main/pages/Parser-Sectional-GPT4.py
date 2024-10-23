@@ -100,13 +100,14 @@ def identify_section(text):
     st.write(f"Identified section for text: {text}\nSection: {section}")
     return section
 
+# Function to get few-shot examples for a specific section
 def get_few_shot_examples(examples, section):
-    section_examples = [example for example in examples if example["output"]["section"] == section]
-    # st.info(section_examples)
-    # formatted_examples = ""
-    # for example in section_examples:
-    #     formatted_examples += f"Input: {example['input']}\nOutput: {json.dumps(example['output'], indent=2)}\n\n"
-    return section_examples
+    section_examples = examples.get(section, [])
+    st.info(section_examples)
+    formatted_examples = ""
+    for example in section_examples:
+        formatted_examples += f"Input: {example['input']}\nOutput: {json.dumps(example['output'], indent=2)}\n\n"
+    return formatted_examples
 
 # Function to parse text with GPT-4 Turbo for a specific section
 def parse_text_with_llm_for_section(text, section, examples):
