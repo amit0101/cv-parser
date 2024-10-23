@@ -129,7 +129,7 @@ def parse_text_with_llm_for_section(text, section, examples):
     st.info(f"Model Response for section {section}: {response_text}")
 
     # Extract JSON from the response
-    # json_output = extract_json_from_response(response_text)
+    json_output = extract_json_from_response(response_text)
     return response_text
 
 # Function to clean the extracted text
