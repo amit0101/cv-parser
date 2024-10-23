@@ -13,6 +13,7 @@ pdf2image = "^1.17.0"
 opencv-python-headless = "^4.9.0.80"
 numpy = "^1.26.4"
 openai = "^1.52.1"
+pytesseract = "^0.3.13"
 
 [build-system]
 requires = ["poetry-core"]
