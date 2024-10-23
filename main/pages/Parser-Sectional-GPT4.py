@@ -102,6 +102,7 @@ def identify_section(text):
 
 def get_few_shot_examples(examples, section):
     section_examples = [example for example in examples if example["output"]["section"] == section]
+    st.info(section_examples)
     formatted_examples = ""
     for example in section_examples:
         formatted_examples += f"Input: {example['input']}\nOutput: {json.dumps(example['output'], indent=2)}\n\n"
