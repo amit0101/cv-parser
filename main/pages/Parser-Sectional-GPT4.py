@@ -110,7 +110,7 @@ def get_few_shot_examples(examples, section):
 # Function to parse text with GPT-4 Turbo for a specific section
 def parse_text_with_llm_for_section(text, section, examples):
     few_shot_examples = get_few_shot_examples(examples, section)
-    prompt = f"Extract the {section} information from the following text and provide it only in JSON format. Ensure the JSON structure matches the examples provided.\n\n{few_shot_examples}\nText: {text}"
+    prompt = f"Extract the {section} information from the following text and provide it only in JSON format. Ensure the JSON structure matches the examples provided.\n\nExamples: {few_shot_examples}\n\nText: {text}"
 
     response = openai.chat.completions.create(
         model="gpt-4-turbo",
