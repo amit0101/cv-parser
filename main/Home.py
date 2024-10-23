@@ -2,10 +2,10 @@ import streamlit as st
 
 
 st.title("Resume parsing approach summary")
-st.info("You can test the two models implemented for this parsing task from the tabs on the left.")
+st.info("Please test the model implemented for this parsing task from the tabs on the left.")
 
 
-st.markdown("There are two models that have been implemented for this parser. One of the latest GPT models `gpt-4-turbo` and an older free model `gpt-2-medium` that can be run locally. This is to demonstrate both the quality of the latest models and the feasibility of implementing free models on a cloud GPU architecture. There are following steps applied in the parsing of a resume in a pdf or a doc format:")
+st.markdown("There are following steps applied in the parsing of a resume in a pdf or a doc format:")
 
 st.markdown("**OCR section detection** - based on positioning and spacing of text groups")
 st.markdown("**Section classification** - based on regex with keywords. This list can be expanded to a much larger corpus of identifiers. In case of `gpt-4-turbo` the section classification of text blocks is enhanced by the LLM itself.")
