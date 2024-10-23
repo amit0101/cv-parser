@@ -83,18 +83,19 @@ def extract_text_with_bboxes(ocr_results):
 # Function to identify the section type using GPT-4 Turbo
 def identify_section(text):
     prompt = (f"Identify the section type for the input text following the example. The identified section should strictly be from the list: {', '.join(sections_list)}.\n\n" +
-              "Example:\nInput: MSc and BSc in Mathematics\nSection: education\n\n")
+              "Example:\nInput: MSc and BSc in Mathematics\nSection: education\n\n" +
+              f"Input: {text}")
 
     response = openai.chat.completions.create(
         model="gpt-4-turbo",
         messages=[
-            {"role": "system", "content": prompt},
-            {"role": "user", "content": text}
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
         ],
         max_tokens=300
     )
 
-    st.write(f"Response: {response}")
+    # st.write(f"Response: {response}")
     section = response.choices[0].message.content
     st.write(f"Identified section for text: {text}\nSection: {section}")
     return section
@@ -109,18 +110,18 @@ def get_few_shot_examples(examples, section):
 # Function to parse text with GPT-4 Turbo for a specific section
 def parse_text_with_llm_for_section(text, section, examples):
     few_shot_examples = get_few_shot_examples(examples, section)
-    prompt = f"Extract the {section} information from the following text and provide it only in JSON format. Ensure the JSON structure matches the examples provided.\n\nExamples: {few_shot_examples}"
+    prompt = f"Extract the {section} information from the following text and provide it only in JSON format. Ensure the JSON structure matches the examples provided.\n\n{few_shot_examples}\nText: {text}"
 
     response = openai.chat.completions.create(
         model="gpt-4-turbo",
         messages=[
-            {"role": "system", "content": prompt},
-            {"role": "user", "content": text}
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
         ],
         max_tokens=1500
     )
 
-    st.write(f"Response: {response}")
+    # st.write(f"Response: {response}")
     response_text = response.choices[0].message.content
     st.info(f"Model Response for section {section}: {response_text}")
 
