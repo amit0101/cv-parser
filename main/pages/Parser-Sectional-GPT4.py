@@ -97,7 +97,7 @@ def identify_section(text):
 
     # st.write(f"Response: {response}")
     section = response.choices[0].message.content
-    st.write(f"Identified section for text: {text}\nSection: {section}")
+    # st.write(f"Identified section for text: {text}\nSection: {section}")
     return section
 
 # Function to get few-shot examples for a specific section
@@ -112,7 +112,7 @@ def get_few_shot_examples(examples, section):
 # Function to parse text with GPT-4 Turbo for a specific section
 def parse_text_with_llm_for_section(text, section, examples):
     few_shot_examples = get_few_shot_examples(examples, section)
-    st.info(few_shot_examples)
+    # st.info(few_shot_examples)
     prompt = f"Extract the {section} information from the following text and provide it only in JSON format. Ensure the JSON structure matches the examples provided.\n\nExamples: {few_shot_examples}\n\nText: {text}"
 
     response = openai.chat.completions.create(
@@ -126,7 +126,7 @@ def parse_text_with_llm_for_section(text, section, examples):
 
     # st.write(f"Response: {response}")
     response_text = response.choices[0].message.content
-    st.info(f"Model Response for section {section}: {response_text}")
+    # st.info(f"Model Response for section {section}: {response_text}")
 
     # Extract JSON from the response
     json_output = extract_json_from_response(response_text)
@@ -140,15 +140,14 @@ def clean_text(text):
 # Function to extract JSON from the model's response
 def extract_json_from_response(response):
     try:
-        # Remove any code block markers like ```json or ```
-        response = response.strip("```")
-        response = re.sub(r'```(json|)', '', response).strip()
-
-        # Extract the JSON part from the response
-        start_idx = response.index("{")
-        end_idx = response.rindex("}") + 1
-        json_response = response[start_idx:end_idx]
-        return json.loads(json_response)
+        response = response.strip()  # Ensure no extra whitespace
+        if response.startswith("{") and response.endswith("}"):
+            return json.loads(response)
+        else:
+            start_idx = response.index("{")
+            end_idx = response.rindex("}") + 1
+            json_response = response[start_idx:end_idx]
+            return json.loads(json_response)
     except (ValueError, json.JSONDecodeError) as e:
         st.write(f"Error extracting JSON: {e}")
         st.write(f"Response received: {response}")
@@ -193,13 +192,13 @@ if uploaded_file is not None:
                 for entry in entries:
                     st.info(f"Processing entry: {entry}")
                     identified_section = identify_section(entry)
-                    st.info(f"Identified section: {identified_section}")
+                    # st.info(f"Identified section: {identified_section}")
                     parsed_entry = parse_text_with_llm_for_section(entry, identified_section, few_shot_examples)
-                    st.info(f"Parsed entry: {parsed_entry}")
+                    # st.info(f"Parsed entry: {parsed_entry}")
                     if identified_section not in parsed_data:
                         parsed_data[identified_section] = []
-                    parsed_data[identified_section].extend(parsed_entry)  # Use extend instead of append
-
+                    if isinstance(parsed_entry, dict):
+                        parsed_data[identified_section].append(parsed_entry)  # Append only valid dictionary entries
             st.success("Resume parsed successfully!")
             st.json(parsed_data)
     except Exception as e:
