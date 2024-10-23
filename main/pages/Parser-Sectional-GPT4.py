@@ -101,12 +101,13 @@ def identify_section(text):
     return section
 
 # Function to get few-shot examples for a specific section
+# Function to get few-shot examples for a specific section
 def get_few_shot_examples(examples, section):
     section_examples = examples.get(section, [])
-    st.info(section_examples)
-    formatted_examples = ""
+    formatted_examples = []
     for example in section_examples:
-        formatted_examples += f"Input: {example['input']}\nOutput: {json.dumps(example['output'])}\n\n"
+        formatted_examples.append({"role": "user", "content": example['input']})
+        formatted_examples.append({"role": "assistant", "content": example['output']})
     return formatted_examples
 
 # Function to parse text with GPT-4 Turbo for a specific section
@@ -161,7 +162,7 @@ st.title("Resume Parser")
 uploaded_file = st.file_uploader("Upload your resume (PDF or DOCX)", type=["pdf", "docx"])
 
 # Load the few-shot examples
-with open('main/few_shot_examples.json', 'r') as file:
+with open('main/few_shot_examples_gpt4.json', 'r') as file:
     few_shot_examples = json.load(file)
 
 if uploaded_file is not None:
