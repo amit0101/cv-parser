@@ -5,7 +5,7 @@ import re
 from PIL import Image
 import streamlit as st
 from pdf2image import convert_from_path
-from pypandoc import convert
+import pypandoc
 import fitz
 import easyocr
 import cv2
