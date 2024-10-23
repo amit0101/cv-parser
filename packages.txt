@@ -1,3 +1,6 @@
+tesseract-ocr
+tesseract-ocr-por
+
 # Required for pdf2image
 poppler-utils
 
@@ -12,8 +15,3 @@ libsm6
 libxrender1
 libxext6
 libglib2.0-0
-
-# Required for ocrmypdf
-tesseract-ocr
-ghostscript
-qpdf
