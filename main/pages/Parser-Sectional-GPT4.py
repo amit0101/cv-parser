@@ -92,10 +92,10 @@ def identify_section(text):
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": prompt}
         ],
-        max_tokens=50
+        max_tokens=300
     )
 
-    section = response.choices[0]['message']['content'].strip()
+    section = response.choices[0].message.content.strip()
     st.write(f"Identified section for text: {text}\nSection: {section}")
     return section
 
@@ -120,7 +120,7 @@ def parse_text_with_llm_for_section(text, section, examples):
         max_tokens=1500
     )
 
-    response_text = response.choices[0]['message']['content'].strip()
+    response_text = response.choices[0].message.content.strip()
     st.info(f"Model Response for section {section}: {response_text}")
 
     # Extract JSON from the response
