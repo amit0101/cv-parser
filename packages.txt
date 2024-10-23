@@ -1,6 +1,8 @@
-texlive-latex-base
-texlive-fonts-recommended
-texlive-fonts-extra
-texlive-latex-extra
 poppler-utils
+libomp
+libmagic1
+libglib2.0-0
+libsm6
+libxrender1
+libxext6
 pandoc
