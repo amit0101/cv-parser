@@ -101,13 +101,12 @@ def identify_section(text):
     return section
 
 # Function to get few-shot examples for a specific section
-# Function to get few-shot examples for a specific section
 def get_few_shot_examples(examples, section):
-    section_examples = examples.get(section, [])
+    section_examples = [example for example in examples if example['output']['section'] == section]
     formatted_examples = []
     for example in section_examples:
         formatted_examples.append({"role": "user", "content": example['input']})
-        formatted_examples.append({"role": "assistant", "content": example['output']})
+        formatted_examples.append({"role": "assistant", "content": json.dumps(example['output'])})
     return formatted_examples
 
 # Function to parse text with GPT-4 Turbo for a specific section
