@@ -140,7 +140,12 @@ def clean_text(text):
 # Function to extract JSON from the model's response
 def extract_json_from_response(response):
     try:
-        start_idx = response.rindex("{")
+        # Remove any code block markers like ```json or ```
+        response = response.strip("```")
+        response = re.sub(r'```(json|)', '', response).strip()
+
+        # Extract the JSON part from the response
+        start_idx = response.index("{")
         end_idx = response.rindex("}") + 1
         json_response = response[start_idx:end_idx]
         return json.loads(json_response)
